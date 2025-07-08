@@ -1337,12 +1337,9 @@ export class Viewer extends EventDispatcher{
 		}
 
 		let dropHandler = async (event) => {
-			console.log(event);
 			event.preventDefault();
 
 			for(const item of event.dataTransfer.items){
-				console.log(item);
-
 				if(item.kind !== "file"){
 					continue;
 				}
@@ -1829,8 +1826,7 @@ export class Viewer extends EventDispatcher{
 			let boxes = [];
 			
 			// volumes with clipping enabled
-			//boxes.push(...this.scene.volumes.filter(v => (v.clip)));
-			boxes.push(...this.scene.volumes.filter(v => (v.clip && v instanceof BoxVolume)));
+			boxes.push(...this.scene.volumes.filter(v => (v.clip && v.name && v.name.startsWith('box'))));
 
 			// profile segments
 			for(let profile of this.scene.profiles){

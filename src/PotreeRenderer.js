@@ -787,13 +787,16 @@ export class Renderer {
 
 					let flattenedMatrices = [].concat(...worldViewProjMatrices.map(m => m.elements));
 
-					let flattenedVertices = new Array(8 * 3 * material.clipPolygons.length);
+					const sumPolygonMarkers = material.clipPolygons.reduce((a, b) => a + b.markers.length, 0);
+					let flattenedVertices = new Array(3 * sumPolygonMarkers);
 					for(let i = 0; i < material.clipPolygons.length; i++){
 						let clipPolygon = material.clipPolygons[i];
+						let markerCount = clipPolygon.markers.length;
+
 						for(let j = 0; j < clipPolygon.markers.length; j++){
-							flattenedVertices[i * 24 + (j * 3 + 0)] = clipPolygon.markers[j].position.x;
-							flattenedVertices[i * 24 + (j * 3 + 1)] = clipPolygon.markers[j].position.y;
-							flattenedVertices[i * 24 + (j * 3 + 2)] = clipPolygon.markers[j].position.z;
+							flattenedVertices[i * 3 * markerCount + (j * 3 + 0)] = clipPolygon.markers[j].position.x;
+							flattenedVertices[i * 3 * markerCount + (j * 3 + 1)] = clipPolygon.markers[j].position.y;
+							flattenedVertices[i * 3 * markerCount + (j * 3 + 2)] = clipPolygon.markers[j].position.z;
 						}
 					}
 

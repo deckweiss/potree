@@ -2,7 +2,7 @@
 precision highp float;
 precision highp int;
 
-#define max_clip_polygons 8
+#define max_clip_polygons 99
 #define PI 3.141592653589793
 
 attribute vec3 position;
@@ -56,7 +56,7 @@ uniform int clipMethod;
 
 #if defined(num_clippolygons) && num_clippolygons > 0
 	uniform int uClipPolygonVCount[num_clippolygons];
-	uniform vec3 uClipPolygonVertices[num_clippolygons * 8];
+	uniform vec3 uClipPolygonVertices[num_clippolygons * max_clip_polygons];
 	uniform mat4 uClipPolygonWVP[num_clippolygons];
 #endif
 
@@ -715,14 +715,17 @@ bool pointInClipPolygon(vec3 point, int polyIdx) {
 	pointNDC.xy = pointNDC.xy / pointNDC.w;
 
 	int j = uClipPolygonVCount[polyIdx] - 1;
+	int markerCount = uClipPolygonVCount[polyIdx];
 	bool c = false;
-	for(int i = 0; i < 8; i++) {
+
+	// NOTE: GLSL cannot handle a dynamic array size; so a constant is used; https://stackoverflow.com/a/39298265
+	for(int i = 0; i < max_clip_polygons; i++) {
 		if(i == uClipPolygonVCount[polyIdx]) {
 			break;
 		}
 
-		//vec4 verti = wvp * vec4(uClipPolygonVertices[polyIdx * 8 + i], 1);
-		//vec4 vertj = wvp * vec4(uClipPolygonVertices[polyIdx * 8 + j], 1);
+		//vec4 verti = wvp * vec4(uClipPolygonVertices[polyIdx * markerCount + i], 1);
+		//vec4 vertj = wvp * vec4(uClipPolygonVertices[polyIdx * markerCount + j], 1);
 
 		//verti.xy = verti.xy / verti.w;
 		//vertj.xy = vertj.xy / vertj.w;
@@ -730,8 +733,8 @@ bool pointInClipPolygon(vec3 point, int polyIdx) {
 		//verti.xy = verti.xy / verti.w * 0.5 + 0.5;
 		//vertj.xy = vertj.xy / vertj.w * 0.5 + 0.5;
 
-		vec3 verti = uClipPolygonVertices[polyIdx * 8 + i];
-		vec3 vertj = uClipPolygonVertices[polyIdx * 8 + j];
+		vec3 verti = uClipPolygonVertices[polyIdx * markerCount + i];
+		vec3 vertj = uClipPolygonVertices[polyIdx * markerCount + j];
 
 		if( ((verti.y > pointNDC.y) != (vertj.y > pointNDC.y)) && 
 			(pointNDC.x < (vertj.x-verti.x) * (pointNDC.y-verti.y) / (vertj.y-verti.y) + verti.x) ) {
