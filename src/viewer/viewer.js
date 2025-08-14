@@ -28,6 +28,7 @@ import {OrbitControls} from "../navigation/OrbitControls.js";
 import {CreatorOrbitControls} from "../navigation/CreatorOrbitControls.js";
 import {FirstPersonControls} from "../navigation/FirstPersonControls.js";
 import {EarthControls} from "../navigation/EarthControls.js";
+import {ViewerEarthControls} from "../navigation/ViewerEarthControls.js";
 import {DeviceOrientationControls} from "../navigation/DeviceOrientationControls.js";
 import {VRControls} from "../navigation/VRControls.js";
 import { EventDispatcher } from "../EventDispatcher.js";
@@ -1148,6 +1149,13 @@ export class Viewer extends EventDispatcher{
 			this.earthControls.addEventListener('start', this.disableAnnotations.bind(this));
 			this.earthControls.addEventListener('end', this.enableAnnotations.bind(this));
 		}
+
+        { // create VIEWER EARTH CONTROLS
+            this.viewerEarthControls = new ViewerEarthControls(this);
+            this.viewerEarthControls.enabled = false;
+            this.viewerEarthControls.addEventListener('start', this.disableAnnotations.bind(this));
+            this.viewerEarthControls.addEventListener('end', this.enableAnnotations.bind(this));
+        }
 
 		{ // create DEVICE ORIENTATION CONTROLS
 			this.deviceControls = new DeviceOrientationControls(this);
