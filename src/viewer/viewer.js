@@ -927,46 +927,64 @@ export class Viewer extends EventDispatcher{
 				break;
 		}
 	}
-	
-	setTopView(){
-		this.scene.view.yaw = 0;
-		this.scene.view.pitch = -Math.PI / 2;
 
+    setTopViewNoZoom() {
+        this.scene.view.yaw = 0;
+        this.scene.view.pitch = -Math.PI / 2;
+    }
+
+	setTopView(){
+		this.setTopViewNoZoom()
 		this.fitToScreen();
 	};
-	
+
+    setBottomViewNoZoom() {
+        this.scene.view.yaw = -Math.PI;
+        this.scene.view.pitch = Math.PI / 2;
+    }
+
 	setBottomView(){
-		this.scene.view.yaw = -Math.PI;
-		this.scene.view.pitch = Math.PI / 2;
-		
+		this.setBottomViewNoZoom();
 		this.fitToScreen();
 	};
+
+    setFrontViewNoZoom() {
+        this.scene.view.yaw = 0;
+        this.scene.view.pitch = 0;
+    }
 
 	setFrontView(){
-		this.scene.view.yaw = 0;
-		this.scene.view.pitch = 0;
+		this.setFrontViewNoZoom();
+		this.fitToScreen();
+	};
 
-		this.fitToScreen();
-	};
-	
+    setBackViewNoZoom() {
+        this.scene.view.yaw = Math.PI;
+        this.scene.view.pitch = 0;
+    }
+
 	setBackView(){
-		this.scene.view.yaw = Math.PI;
-		this.scene.view.pitch = 0;
-		
+		this.setBackViewNoZoom();
 		this.fitToScreen();
 	};
+
+    setLeftViewNoZoom() {
+        this.scene.view.yaw = -Math.PI / 2;
+        this.scene.view.pitch = 0;
+    }
 
 	setLeftView(){
-		this.scene.view.yaw = -Math.PI / 2;
-		this.scene.view.pitch = 0;
-
+		this.setLeftViewNoZoom();
 		this.fitToScreen();
 	};
 
-	setRightView () {
-		this.scene.view.yaw = Math.PI / 2;
-		this.scene.view.pitch = 0;
+    setRightViewNoZoom() {
+        this.scene.view.yaw = Math.PI / 2;
+        this.scene.view.pitch = 0;
+    }
 
+	setRightView () {
+		this.setRightViewNoZoom();
 		this.fitToScreen();
 	};
 
